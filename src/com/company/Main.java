@@ -557,27 +557,38 @@ public class Main {
     //      from a list of winning moves then returns column and row for AI
     //--------------------------------------------------------------------------//
 
+
+    //returns int array that contains column and row choice and whether those values are valid
     public static int[] checkWins(List<int[]> wins, String[][] blank, int[] moves,int column) {
+        //skips code if the game is so early that the recursive AI is useless or the recursive AI finds no winning moves
         if(moves[0]< 4 || wins.size() == 0)
         {
+            //calls simple AI method defined above
          int[] choice = aiChoice(column,blank);
+            //array from simple AI method
             return choice;
         }
-
+        //counter that will check how many of the winning moves match the current games moves
         int counter = 0;
+        //creates a new integer list that will contain all matching winning moves index number
         List<Integer> matchingMoves = new ArrayList<>();
         for (int[] tempMoves : wins) {
+            //checks to see if the last move matches any of the same indexed moves from the winning moves list
             if (tempMoves[moves[0]] == moves[moves[0]]) {
+                //adds matching moves index to integer list
                 matchingMoves.add(counter);
             }
+            //increments counter
             counter++;
         }
+        //randomly chooses one of the matching winning moves list and chooses to implement the next move on that array
         Random ran = new Random();
-        column = wins.get(ran.nextInt(matchingMoves.size()))[4];
+        column = wins.get(ran.nextInt(matchingMoves.size()))[moves[0] + 1];
+        //makes sure column choice is valid and finds row choice
         int[] choices = checkChoice(column, blank);
+        //returns row and column choice
         return choices;
     }
-
 }
 
 
