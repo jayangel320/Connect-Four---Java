@@ -444,37 +444,49 @@ public class Main {
 
     //The problem with this is it looks for consecutive "x"'s meaning any area where there are two or three in a row
     // and this is only defensive programing what it needs
-    // TODO is search for consecutive "o"s as well and become offensive when necessary
-    //TODO only searches for consecutive "marks" will miss if there are 2 in row then blank then 1 or any such combo
+    // TODO is search for consecutive "o"s as well and become offensive when ever being defensive is unnecessary
+    //TODO only searches for consecutive "marks" will miss if there are 2 in row then blank then 1; or any such combo
 
     //Reformatted the checkIfWin to look at where a win would be possible then add that column to a map
     public static String[][] betterAIChoice(String[][] blank) {
         String mark = "x";
         // This might work but not for when you have a diagonal and the winning move is the lowest spot
         // and not when the winning move is horizontal to the left
+
+        //creates a map that contains information on where the marker should go
         Map<Integer, int[]> bestChoice = new TreeMap<>();
-        int w = 1;
+
+        //this array contains the row and column of the starting point and the direction (see method bestChoiceCol for
+        // desc of directions
         int[] locationDirection = {0, 0, 0};
+        //cycles through the rows and columns looking for consecutive "marks"
         for (int i = 5; i > -0; i--) {
             for (int j = 0; j < 7; j++) {
 
+                //checks each address on game board for "mark"
                 if (blank[i][j] == mark) {
+                    //counter for each of the checks; diagonal, vertical, and horizontal
                     int k = 1;
                     int x = 1;
                     int y = 1;
+                    //checks diagonally with the top to the right, horizontal to the right and vertically
                     if (j < 4) {
+                        //skips checking vertically and diagonally if you are too high up on the board
                         if (i > 2) {
+                            //checks for consecutive "marks" vertically
                             while (blank[i - k][j] == mark && k < 4) {
-                                //System.out.printf("%n%s%n",blank[i-k][j] );
+                                //checks to see if the next consecutive spot is blank thereby making this a good place for the AI to go
                                 if (blank[i - k++ - 1][j] == ".") {
+                                    //add address of first "mark" to location direction and direction of the consecutive "mark"s
                                     locationDirection[0] = i;
                                     locationDirection[1] = j;
                                     locationDirection[2] = 3;
+                                    //adds location direction to map
                                     bestChoice.putIfAbsent(k, locationDirection);
                                 }
                             }
+                            //checks for consecutive "mark"s diagonally with the top to the right
                             while (blank[i - y][j + y] == mark && y < 4) {
-                                //System.out.printf("%n%s%n",blank[i-y][j+y] );
                                 if (blank[i - y - 1][j + y++ + 1] == ".") {
                                     locationDirection[0] = i;
                                     locationDirection[1] = j;
@@ -483,6 +495,7 @@ public class Main {
                                 }
                             }
                         }
+                        //checks for consecutive "mark's horizontally to the right
                         while (blank[i][j + x] == mark && x < 4) {
                             //System.out.printf("%n%s  ( %s, %s) %n",blank[i][j+x],i,j+x );
                             if (blank[i - x++ - 1][j] == ".") {
@@ -492,8 +505,11 @@ public class Main {
                                 bestChoice.putIfAbsent(x, locationDirection);
                             }
                         }
+                        //checks diagonally with the top to the left and horizontally
                     } else if (j > 3) {
+                        //skips if too high on game board
                         if (i > 2) {
+                            //checks vertically
                             while (blank[i - x][j] == mark && x < 4) {
                                 if (blank[i - x++ - 1][j] == ".") {
                                     locationDirection[0] = i;
@@ -502,8 +518,8 @@ public class Main {
                                     bestChoice.putIfAbsent(x, locationDirection);
                                 }
                             }
+                            //checks diagonally with the top to the left
                             while (blank[i - y][j - y] == mark && y < 4) {
-
                                 if (blank[i - y - 1][j - y++ - 1] == ".") {
                                     locationDirection[0] = i;
                                     locationDirection[1] = j;
@@ -518,6 +534,7 @@ public class Main {
                 }
             }
         }
+        //checks to see ff there were good choices found for AIs marker
         if (bestChoice.size() > 0) {
             //saves size of map adding one to account for key starting at 2
             int sizeOfVect = bestChoice.size() + 1;
@@ -532,6 +549,7 @@ public class Main {
             //returning marker
             return blank;
         }
+        //is implemented if there were no good choices found
         //TODO: should be more random but ok for now
         int[] array =  aiChoice(4, blank);
         //doesn't implement a move so fix that if you think this will be usefull
