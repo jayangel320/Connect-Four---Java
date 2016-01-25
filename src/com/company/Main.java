@@ -23,13 +23,17 @@ public class Main {
     //--------------------------------------------------------------------------//
     //                  deep copy of board
     //--------------------------------------------------------------------------//
+
     public static String[][] deepCopy(String[][] blank) {
+        //creates new 2dim string array
         String[][] copy = new String[6][7];
         for (int r = 0; r < 6; r++) {
             for (int c = 0; c < 7; c++) {
+                //cycles through game board and copies values to new array
                 copy[r][c] = blank[r][c];
             }
         }
+        //returns copy
         return copy;
     }
 
@@ -123,10 +127,13 @@ public class Main {
     //--------------------------------------------------------------------------//
 
     public static int[] deepCopy(int[] moves) {
+        //creates new int array
         int[] copy = new int[42];
         for (int r = 0; r < 42; r++) {
+            //cycles through moves and copies values to array
             copy[r] = moves[r];
         }
+        //returns new array
         return copy;
     }
 
@@ -134,8 +141,12 @@ public class Main {
     //      This takes the users input and safes it as a String
     //--------------------------------------------------------------------------//
 
+    //Throws exception in case user input to string fails
     public static String question() throws IOException {
+        //Creates a new buffered reader object
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+        //returns readLine which returns what the user inputs as a string
         return br.readLine();
     }
 
@@ -146,9 +157,11 @@ public class Main {
     public static String[][] refresh(String[][] screen) {
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 7; j++) {
+                //cycles through all of the values on game board and sets them to "."
                 screen[i][j] = ".";
             }
         }
+        // returns changed board
         return screen;
     }
 
@@ -157,20 +170,28 @@ public class Main {
     //--------------------------------------------------------------------------//
 
     public static void display(String[][] screen) {
+        //indents board
         System.out.println("");
+        //cycles through the rows of the board
         for (int i = 0; i < 6; i++) {
+            //prints the left boarder of board
             System.out.printf("|");
+
+            //cycles through the columns and prints the values
             for (int j = 0; j < 7; j++) {
                 System.out.printf(" %s ", screen[i][j]);
             }
+            //prints the right side boarder
             System.out.println("|");
         }
+        //prints the bottom boarder of game board
         System.out.printf("|");
         for (int i = 0; i < 7; i++) {
             System.out.printf(" - ");
         }
         System.out.println("|");
 
+        //prints out the labels for each column
         System.out.printf("|");
         for (int i = 1; i < 8; i++) {
             System.out.printf(" %s ", i);
@@ -182,12 +203,18 @@ public class Main {
     //                          Asks users initial questions
     //--------------------------------------------------------------------------//
 
+    //returns true if user wants to play the game
     public static boolean promptUser() throws IOException {
+        //string array of things program will ask user
         String[] bubbles = {"What is your name?: ", "would you like to play connect four?: "};
+        //asks user what there name is using string array values from above
         System.out.printf("%s", bubbles[0]);
+        //calls method question which returns users response as a string
         String answer = question();
         System.out.printf("%n%s %s", answer, bubbles[1]);
+        //calls method question which returns users response as a string
         answer = question().toLowerCase();
+        //checks to see if user input yes and only yes
         if (answer.contains("yes")) {
             return true;
         }
